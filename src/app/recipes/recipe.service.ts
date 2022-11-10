@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping/shopping-list.service';
 import { Recipe } from './recipes.model';
@@ -7,7 +7,7 @@ import { Recipe } from './recipes.model';
   providedIn: 'root'
 })
 export class RecipeService {
-  recipeSelected = new EventEmitter<Recipe>()
+
   private recipes:Recipe[] = [
     new Recipe('Arroz con pollo', 'This is a recipe for the arroz con pollo peruvian dish',
      'https://comidasperuanas.net/wp-content/uploads/2015/07/Arroz-con-pollo-peruano.webp', [
