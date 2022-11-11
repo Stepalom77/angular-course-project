@@ -1,34 +1,60 @@
 import { Injectable } from '@angular/core';
-import { Ingredient } from '../shared/ingredient.model';
-import { ShoppingListService } from '../shopping/shopping-list.service';
 import { Recipe } from './recipes.model';
+import { Ingredient } from '../shared/ingredient.model';
+import { Subject } from 'rxjs';
+import { ShoppingListService } from '../shopping/shopping-list.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
+  recipesChanged = new Subject<Recipe[]>();
 
-  private recipes:Recipe[] = [
-    new Recipe('Arroz con pollo', 'This is a recipe for the arroz con pollo peruvian dish',
-     'https://comidasperuanas.net/wp-content/uploads/2015/07/Arroz-con-pollo-peruano.webp', [
-      new Ingredient('Rice', 2), new Ingredient('Chicken', 1)
-     ]),
-     new Recipe('Arroz con pollo', 'This is a recipe for the arroz con pollo peruvian dish',
-     'https://comidasperuanas.net/wp-content/uploads/2015/07/Arroz-con-pollo-peruano.webp', [
-      new Ingredient('Rice', 2), new Ingredient('Chicken', 1)
-     ])
-  ]
-  constructor(private shoppingListService:ShoppingListService) {}
+  private recipes: Recipe[] = [
+    new Recipe(
+      'Tasty Schnitzel',
+      'A super-tasty Schnitzel - just awesome!',
+      'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+      [
+        new Ingredient('Meat', 1),
+        new Ingredient('French Fries', 20)
+      ]),
+    new Recipe('Big Fat Burger',
+      'What else you need to say?',
+      'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
+      [
+        new Ingredient('Buns', 2),
+        new Ingredient('Meat', 1)
+      ])
+  ];
 
-  getRecipes(){
-    return this.recipes.slice()
+  constructor(private slService: ShoppingListService) {}
+
+  getRecipes() {
+    return this.recipes.slice();
   }
 
-  getRecipe(index:number){
-    return this.recipes[index]
+  getRecipe(index: number) {
+    return this.recipes[index];
   }
 
-  addIngredientsToShoppingList(ingredients:Ingredient[]){
-    this.shoppingListService.addIngredients(ingredients)
+  addIngredientsToShoppingList(ingredients: Ingredient[]) {
+    this.slService.addIngredients(ingredients);
+  }
+
+  addRecipe(recipe: Recipe) {
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  updateRecipe(index: number, newRecipe: Recipe) {
+    this.recipes[index] = newRecipe;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
+    this.recipesChanged.next(this.recipes.slice());
   }
 }
+
