@@ -10,6 +10,11 @@ import { ShoppingListService } from '../shopping/shopping-list.service';
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
 
+  setRecipes(recipes:Recipe[]){
+    this.recipes = recipes
+    this.recipesChanged.next(this.recipes.slice())
+  }
+
   private recipes: Recipe[] = [
     new Recipe(
       'Tasty Schnitzel',
